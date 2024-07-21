@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomodoro Timer</title>
     <style>
+        @keyframes wiggle {
+            0%, 100% {
+                transform: rotate(-3deg);
+            }
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -21,6 +30,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         h1 {
@@ -47,14 +57,65 @@
         button:hover {
             background-color: #ff4500;
         }
+
+        .tomato-emoji {
+            font-size: 100px;
+            display: block;
+            margin: 0 auto 20px;
+            animation: wiggle 0.5s infinite;
+        }
+
+        .settings-menu {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: 200px;
+        }
+
+        .settings-menu h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .settings-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .settings-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="pomodoro-container">
         <h1>Pomodoro Timer</h1>
+        <div class="tomato-emoji">🍅</div>
         <div id="timer">25:00</div>
         <button id="start">Start</button>
         <button id="reset">Reset</button>
+        <button class="settings-button" id="settingsButton">⚙️</button>
+        <div class="settings-menu" id="settingsMenu">
+            <h2>Settings</h2>
+            <label>
+                Timer Duration (minutes):
+                <input type="number" id="timerDuration" value="25" min="1" max="60">
+            </label>
+            <button id="saveSettings">Save</button>
+        </div>
     </div>
 
     <script>
@@ -64,6 +125,10 @@
         const timerElement = document.getElementById('timer');
         const startButton = document.getElementById('start');
         const resetButton = document.getElementById('reset');
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const timerDurationInput = document.getElementById('timerDuration');
+        const saveSettingsButton = document.getElementById('saveSettings');
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -89,12 +154,23 @@
         function resetTimer() {
             clearInterval(timer);
             timer = null;
-            timeLeft = 25 * 60;
+            timeLeft = parseInt(timerDurationInput.value) * 60;
             updateTimer();
+        }
+
+        function toggleSettingsMenu() {
+            settingsMenu.style.display = settingsMenu.style.display === 'none' || settingsMenu.style.display === '' ? 'block' : 'none';
+        }
+
+        function saveSettings() {
+            resetTimer();
+            toggleSettingsMenu();
         }
 
         startButton.addEventListener('click', startTimer);
         resetButton.addEventListener('click', resetTimer);
+        settingsButton.addEventListener('click', toggleSettingsMenu);
+        saveSettingsButton.addEventListener('click', saveSettings);
 
         updateTimer(); // initialize timer display
     </script>
