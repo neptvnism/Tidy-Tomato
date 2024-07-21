@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Arial Rounded MT Bold', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,7 +45,7 @@
         }
 
         button {
-            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', cursive, sans-serif;
+            font-family: inherit;
             font-size: 16px;
             padding: 8px;
             margin: 5px;
@@ -119,11 +119,14 @@
         .task-list button {
             width: 25px;
             height: 25px;
-            padding: 5px;
+            padding: 0;
             background-color: #ff6347;
             font-size: 20px;
-            margin-left: 5px;
-            border-radius: 5px;
+            margin-left: 10px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .tasks {
@@ -201,10 +204,22 @@
                 Hide Progress
             </label>
             <br>
+            <label>
+                Font:
+                <select id="fontSelect">
+                    <option value="'Arial Rounded MT Bold', sans-serif">Arial Rounded MT Bold</option>
+                    <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="'Georgia', serif">Georgia</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                </select>
+            </label>
+            <br>
             <button id="saveSettings">SAVE</button>
         </div>
         <div class="task-list">
-            <h2>Tasks</h2><button id="addTaskButton">+</button>
+            <h2>Tasks</h2>
+            <button id="addTaskButton">+</button>
             <input type="text" id="taskInput" placeholder="Add a new task...">
             <ul class="tasks" id="taskList"></ul>
         </div>
@@ -237,6 +252,7 @@
         const hideCompletedTasksToggle = document.getElementById('hideCompletedTasks');
         const hideProgressToggle = document.getElementById('hideProgress');
         const saveSettingsButton = document.getElementById('saveSettings');
+        const fontSelect = document.getElementById('fontSelect');
         const tomatoEmoji = document.getElementById('tomatoEmoji');
         const taskInput = document.getElementById('taskInput');
         const addTaskButton = document.getElementById('addTaskButton');
@@ -344,6 +360,8 @@
             } else {
                 tomatoEmoji.style.display = 'none';
             }
+
+            document.body.style.fontFamily = fontSelect.value;
 
             updateTaskVisibility();
             toggleSettingsMenu();
