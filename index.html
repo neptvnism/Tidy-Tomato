@@ -68,14 +68,15 @@
         .settings-menu {
             display: none;
             position: absolute;
-            top: 80px;
-            right: 20px;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
             background: white;
             border: 1px solid #ddd;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 10px;
-            width: 200px;
+            width: 250px;
         }
 
         .settings-menu h2 {
@@ -108,8 +109,13 @@
         <div class="settings-menu" id="settingsMenu">
             <h2>Settings</h2>
             <label>
-                Timer Duration (minutes):
-                <input type="number" id="timerDuration" value="25" min="1" max="60">
+                Work Duration (minutes):
+                <input type="number" id="workDuration" value="25" min="1" max="60">
+            </label>
+            <br>
+            <label>
+                Break Duration (minutes):
+                <input type="number" id="breakDuration" value="5" min="1" max="30">
             </label>
             <br>
             <label>
@@ -128,14 +134,18 @@
 
     <script>
         let timer;
-        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isBreak = false;
+        let workDuration = 25 * 60; // 25 minutes in seconds
+        let breakDuration = 5 * 60; // 5 minutes in seconds
+        let timeLeft = workDuration; // initial time left set to work duration
 
         const timerElement = document.getElementById('timer');
         const startButton = document.getElementById('start');
         const resetButton = document.getElementById('reset');
         const settingsButton = document.getElementById('settingsButton');
         const settingsMenu = document.getElementById('settingsMenu');
-        const timerDurationInput = document.getElementById('timerDuration');
+        const workDurationInput = document.getElementById('workDuration');
+        const breakDurationInput = document.getElementById('breakDuration');
         const wiggleToggle = document.getElementById('wiggleToggle');
         const showTomatoToggle = document.getElementById('showTomatoToggle');
         const saveSettingsButton = document.getElementById('saveSettings');
@@ -156,7 +166,17 @@
                     } else {
                         clearInterval(timer);
                         timer = null;
-                        alert('Time\'s up!');
+                        if (isBreak) {
+                            alert('Break is over! Time to work!');
+                            isBreak = false;
+                            timeLeft = parseInt(workDurationInput.value) * 60;
+                        } else {
+                            alert('Time\'s up! Take a break!');
+                            isBreak = true;
+                            timeLeft = parseInt(breakDurationInput.value) * 60;
+                        }
+                        updateTimer();
+                        startTimer();
                     }
                 }, 1000);
             }
@@ -165,7 +185,7 @@
         function resetTimer() {
             clearInterval(timer);
             timer = null;
-            timeLeft = parseInt(timerDurationInput.value) * 60;
+            timeLeft = isBreak ? parseInt(breakDurationInput.value) * 60 : parseInt(workDurationInput.value) * 60;
             updateTimer();
         }
 
