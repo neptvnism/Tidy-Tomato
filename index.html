@@ -45,8 +45,8 @@
         }
 
         button {
-            font-size: 24px;
-            padding: 10px;
+            font-size: 20px;
+            padding: 8px;
             margin: 5px;
             border: none;
             border-radius: 5px;
@@ -109,14 +109,19 @@
         }
 
         .task-list input[type="text"] {
-            width: calc(100% - 22px);
+            width: calc(100% - 50px);
             padding: 5px;
             margin-bottom: 10px;
         }
 
         .task-list button {
-            width: 100%;
+            width: 40px;
+            height: 40px;
+            padding: 5px;
             background-color: #ff6347;
+            font-size: 20px;
+            margin-left: 5px;
+            border-radius: 5px;
         }
 
         .tasks {
@@ -132,6 +137,10 @@
 
         .tasks li.completed {
             text-decoration: line-through;
+        }
+
+        .tasks input[type="checkbox"] {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -166,12 +175,17 @@
                 Show Tomato
             </label>
             <br>
+            <label>
+                <input type="checkbox" id="hideCompletedTasks">
+                Hide Completed Tasks
+            </label>
+            <br>
             <button id="saveSettings">Save</button>
         </div>
         <div class="task-list">
             <h2>Tasks</h2>
             <input type="text" id="taskInput" placeholder="Add a new task...">
-            <button id="addTaskButton">➕</button>
+            <button id="addTaskButton">+</button>
             <ul class="tasks" id="taskList"></ul>
         </div>
     </div>
@@ -194,6 +208,7 @@
         const breakDurationInput = document.getElementById('breakDuration');
         const wiggleToggle = document.getElementById('wiggleToggle');
         const showTomatoToggle = document.getElementById('showTomatoToggle');
+        const hideCompletedTasksToggle = document.getElementById('hideCompletedTasks');
         const saveSettingsButton = document.getElementById('saveSettings');
         const tomatoEmoji = document.getElementById('tomatoEmoji');
         const taskInput = document.getElementById('taskInput');
@@ -271,6 +286,16 @@
             } else {
                 tomatoEmoji.style.display = 'none';
             }
+            
+            // Toggle completed tasks visibility
+            const tasks = document.querySelectorAll('.tasks li');
+            tasks.forEach(task => {
+                if (hideCompletedTasksToggle.checked && task.classList.contains('completed')) {
+                    task.style.display = 'none';
+                } else {
+                    task.style.display = 'flex';
+                }
+            });
         }
 
         function addTask() {
@@ -285,11 +310,13 @@
                     } else {
                         li.classList.remove('completed');
                     }
+                    saveSettings(); // Update tasks visibility based on settings
                 });
                 li.appendChild(checkbox);
                 li.appendChild(document.createTextNode(taskText));
                 taskList.appendChild(li);
                 taskInput.value = '';
+                saveSettings(); // Update tasks visibility based on settings
             }
         }
 
