@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <title>Tidy Tomato</title>
     <style>
         @keyframes wiggle {
             0%, 100% {
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', cursive, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,6 +45,7 @@
         }
 
         button {
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', cursive, sans-serif;
             font-size: 16px;
             padding: 8px;
             margin: 5px;
@@ -106,6 +107,7 @@
         .task-list h2 {
             font-size: 18px;
             margin-bottom: 10px;
+            display: inline-block;
         }
 
         .task-list input[type="text"] {
@@ -115,8 +117,8 @@
         }
 
         .task-list button {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             padding: 5px;
             background-color: #ff6347;
             font-size: 20px;
@@ -160,7 +162,7 @@
 </head>
 <body>
     <div class="pomodoro-container">
-        <h1>Pomodoro Timer</h1>
+        <h1>Tidy Tomato</h1>
         <div class="tomato-emoji" id="tomatoEmoji">🍅</div>
         <div id="timer">25:00</div>
         <button id="start">START</button>
@@ -202,9 +204,8 @@
             <button id="saveSettings">SAVE</button>
         </div>
         <div class="task-list">
-            <h2>Tasks</h2>
+            <h2>Tasks</h2><button id="addTaskButton">+</button>
             <input type="text" id="taskInput" placeholder="Add a new task...">
-            <button id="addTaskButton">+</button>
             <ul class="tasks" id="taskList"></ul>
         </div>
         <div class="progress" id="progressSection">
@@ -276,125 +277,125 @@
                         startTimer();
                     }
                 }, 1000);
-               } else if (isPaused) {
-                              isPaused = false;
-                              timer = setInterval(() => {
-                                  if (timeLeft > 0) {
-                                      timeLeft--;
-                                      updateTimer();
-                                  } else {
-                                      clearInterval(timer);
-                                      timer = null;
-                                      if (isBreak) {
-                                          alert('Break is over! Time to work!');
-                                          isBreak = false;
-                                          timeLeft = parseInt(workDurationInput.value) * 60;
-                                      } else {
-                                          alert('Time\'s up! Take a break!');
-                                          sessionCount++;
-                                          totalTimeWorked += parseInt(workDurationInput.value);
-                                          sessionCountElement.textContent = `Sessions Completed: ${sessionCount}`;
-                                          totalTimeElement.textContent = `Total Time Worked: ${totalTimeWorked} minutes`;
-                                          isBreak = true;
-                                          timeLeft = parseInt(breakDurationInput.value) * 60;
-                                      }
-                                      updateTimer();
-                                      startTimer();
-                                  }
-                              }, 1000);
-                          }
-                      }
+            } else if (isPaused) {
+                isPaused = false;
+                timer = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimer();
+                    } else {
+                        clearInterval(timer);
+                        timer = null;
+                        if (isBreak) {
+                            alert('Break is over! Time to work!');
+                            isBreak = false;
+                            timeLeft = parseInt(workDurationInput.value) * 60;
+                        } else {
+                            alert('Time\'s up! Take a break!');
+                            sessionCount++;
+                            totalTimeWorked += parseInt(workDurationInput.value);
+                            sessionCountElement.textContent = `Sessions Completed: ${sessionCount}`;
+                            totalTimeElement.textContent = `Total Time Worked: ${totalTimeWorked} minutes`;
+                            isBreak = true;
+                            timeLeft = parseInt(breakDurationInput.value) * 60;
+                        }
+                        updateTimer();
+                        startTimer();
+                    }
+                }, 1000);
+            }
+        }
 
-                      function pauseTimer() {
-                          if (timer) {
-                              clearInterval(timer);
-                              timer = null;
-                              isPaused = true;
-                          }
-                      }
+        function pauseTimer() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+                isPaused = true;
+            }
+        }
 
-                      function resetTimer() {
-                          clearInterval(timer);
-                          timer = null;
-                          isPaused = false;
-                          isBreak = false;
-                          timeLeft = parseInt(workDurationInput.value) * 60;
-                          updateTimer();
-                      }
+        function resetTimer() {
+            clearInterval(timer);
+            timer = null;
+            isPaused = false;
+            isBreak = false;
+            timeLeft = parseInt(workDurationInput.value) * 60;
+            updateTimer();
+        }
 
-                      function toggleSettingsMenu() {
-                          settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
-                      }
+        function toggleSettingsMenu() {
+            settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+        }
 
-                      function saveSettings() {
-                          workDuration = parseInt(workDurationInput.value) * 60;
-                          breakDuration = parseInt(breakDurationInput.value) * 60;
-                          timeLeft = workDuration;
-                          updateTimer();
+        function saveSettings() {
+            workDuration = parseInt(workDurationInput.value) * 60;
+            breakDuration = parseInt(breakDurationInput.value) * 60;
+            timeLeft = workDuration;
+            updateTimer();
 
-                          if (wiggleToggle.checked) {
-                              tomatoEmoji.style.animation = 'wiggle 0.5s infinite';
-                          } else {
-                              tomatoEmoji.style.animation = 'none';
-                          }
+            if (wiggleToggle.checked) {
+                tomatoEmoji.style.animation = 'wiggle 0.5s infinite';
+            } else {
+                tomatoEmoji.style.animation = 'none';
+            }
 
-                          if (showTomatoToggle.checked) {
-                              tomatoEmoji.style.display = 'block';
-                          } else {
-                              tomatoEmoji.style.display = 'none';
-                          }
+            if (showTomatoToggle.checked) {
+                tomatoEmoji.style.display = 'block';
+            } else {
+                tomatoEmoji.style.display = 'none';
+            }
 
-                          updateTaskVisibility();
-                          toggleSettingsMenu();
-                      }
+            updateTaskVisibility();
+            toggleSettingsMenu();
+        }
 
-                      function updateTaskVisibility() {
-                          const tasks = document.querySelectorAll('.tasks li');
-                          tasks.forEach(task => {
-                              if (hideCompletedTasksToggle.checked && task.classList.contains('completed')) {
-                                  task.style.display = 'none';
-                              } else {
-                                  task.style.display = 'flex';
-                              }
-                          });
-                      }
+        function updateTaskVisibility() {
+            const tasks = document.querySelectorAll('.tasks li');
+            tasks.forEach(task => {
+                if (hideCompletedTasksToggle.checked && task.classList.contains('completed')) {
+                    task.style.display = 'none';
+                } else {
+                    task.style.display = 'flex';
+                }
+            });
+        }
 
-                      function addTask() {
-                          const taskText = taskInput.value.trim();
-                          if (taskText) {
-                              const li = document.createElement('li');
-                              const checkbox = document.createElement('input');
-                              checkbox.type = 'checkbox';
-                              checkbox.addEventListener('change', (e) => {
-                                  if (e.target.checked) {
-                                      li.classList.add('completed');
-                                  } else {
-                                      li.classList.remove('completed');
-                                  }
-                                  updateTaskVisibility();
-                              });
-                              li.appendChild(checkbox);
-                              li.appendChild(document.createTextNode(taskText));
-                              taskList.appendChild(li);
-                              taskInput.value = '';
-                              updateTaskVisibility();
-                          }
-                      }
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const li = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        li.classList.add('completed');
+                    } else {
+                        li.classList.remove('completed');
+                    }
+                    updateTaskVisibility();
+                });
+                li.appendChild(checkbox);
+                li.appendChild(document.createTextNode(taskText));
+                taskList.appendChild(li);
+                taskInput.value = '';
+                updateTaskVisibility();
+            }
+        }
 
-                      function toggleProgressVisibility() {
-                          progressSection.style.display = hideProgressToggle.checked ? 'none' : 'block';
-                      }
+        function toggleProgressVisibility() {
+            progressSection.style.display = hideProgressToggle.checked ? 'none' : 'block';
+        }
 
-                      startButton.addEventListener('click', startTimer);
-                      pauseButton.addEventListener('click', pauseTimer);
-                      resetButton.addEventListener('click', resetTimer);
-                      settingsButton.addEventListener('click', toggleSettingsMenu);
-                      saveSettingsButton.addEventListener('click', saveSettings);
-                      addTaskButton.addEventListener('click', addTask);
-                      hideProgressToggle.addEventListener('change', toggleProgressVisibility);
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+        settingsButton.addEventListener('click', toggleSettingsMenu);
+        saveSettingsButton.addEventListener('click', saveSettings);
+        addTaskButton.addEventListener('click', addTask);
+        hideProgressToggle.addEventListener('change', toggleProgressVisibility);
 
-                      updateTimer(); // Initialize timer display
-                      saveSettings(); // Initialize settings on load
-                  </script>
-              </body>
-              </html>
+        updateTimer(); // Initialize timer display
+        saveSettings(); // Initialize settings on load
+    </script>
+</body>
+</html>
