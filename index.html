@@ -161,9 +161,53 @@
         .progress p {
             margin: 5px 0;
         }
+
+        /* Theme Colors */
+        .red-theme {
+            --primary-color: #ff6347;
+            --hover-color: #ff4500;
+        }
+
+        .orange-theme {
+            --primary-color: #ffa500;
+            --hover-color: #ff8c00;
+        }
+
+        .yellow-theme {
+            --primary-color: #ffd700;
+            --hover-color: #ffc107;
+        }
+
+        .green-theme {
+            --primary-color: #32cd32;
+            --hover-color: #2e8b57;
+        }
+
+        .blue-theme {
+            --primary-color: #1e90ff;
+            --hover-color: #1c86ee;
+        }
+
+        .indigo-theme {
+            --primary-color: #4b0082;
+            --hover-color: #3a005f;
+        }
+
+        .violet-theme {
+            --primary-color: #ee82ee;
+            --hover-color: #d870d8;
+        }
+
+        button, .settings-button {
+            background-color: var(--primary-color);
+        }
+
+        button:hover, .settings-button:hover {
+            background-color: var(--hover-color);
+        }
     </style>
 </head>
-<body>
+<body class="red-theme">
     <div class="pomodoro-container">
         <h1>Tidy Tomato</h1>
         <div class="tomato-emoji" id="tomatoEmoji">🍅</div>
@@ -215,6 +259,19 @@
                 </select>
             </label>
             <br>
+            <label>
+                Theme:
+                <select id="themeSelect">
+                    <option value="red-theme">Red</option>
+                    <option value="orange-theme">Orange</option>
+                    <option value="yellow-theme">Yellow</option>
+                    <option value="green-theme">Green</option>
+                    <option value="blue-theme">Blue</option>
+                    <option value="indigo-theme">Indigo</option>
+                    <option value="violet-theme">Violet</option>
+                </select>
+            </label>
+            <br>
             <button id="saveSettings">SAVE</button>
         </div>
         <div class="task-list">
@@ -245,21 +302,22 @@
         const resetButton = document.getElementById('reset');
         const settingsButton = document.getElementById('settingsButton');
         const settingsMenu = document.getElementById('settingsMenu');
-        const workDurationInput = document.getElementById('workDuration');
-        const breakDurationInput = document.getElementById('breakDuration');
-        const wiggleToggle = document.getElementById('wiggleToggle');
-        const showTomatoToggle = document.getElementById('showTomatoToggle');
-        const hideCompletedTasksToggle = document.getElementById('hideCompletedTasks');
-        const hideProgressToggle = document.getElementById('hideProgress');
         const saveSettingsButton = document.getElementById('saveSettings');
-        const fontSelect = document.getElementById('fontSelect');
-        const tomatoEmoji = document.getElementById('tomatoEmoji');
         const taskInput = document.getElementById('taskInput');
         const addTaskButton = document.getElementById('addTaskButton');
         const taskList = document.getElementById('taskList');
         const sessionCountElement = document.getElementById('sessionCount');
         const totalTimeElement = document.getElementById('totalTime');
         const progressSection = document.getElementById('progressSection');
+        const workDurationInput = document.getElementById('workDuration');
+        const breakDurationInput = document.getElementById('breakDuration');
+        const wiggleToggle = document.getElementById('wiggleToggle');
+        const showTomatoToggle = document.getElementById('showTomatoToggle');
+        const hideCompletedTasksToggle = document.getElementById('hideCompletedTasks');
+        const hideProgressToggle = document.getElementById('hideProgress');
+        const fontSelect = document.getElementById('fontSelect');
+        const themeSelect = document.getElementById('themeSelect');
+        const tomatoEmoji = document.getElementById('tomatoEmoji');
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -268,7 +326,7 @@
         }
 
         function startTimer() {
-            if (!timer && !isPaused) {
+            if (!timer) {
                 timer = setInterval(() => {
                     if (timeLeft > 0) {
                         timeLeft--;
@@ -362,6 +420,8 @@
             }
 
             document.body.style.fontFamily = fontSelect.value;
+
+            document.body.className = themeSelect.value;
 
             updateTaskVisibility();
             toggleSettingsMenu();
