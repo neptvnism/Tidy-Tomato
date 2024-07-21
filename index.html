@@ -51,13 +51,13 @@
             margin: 5px;
             border: none;
             border-radius: 5px;
-            background-color: #ff6347;
+            background-color: var(--primary-color);
             color: white;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #ff4500;
+            background-color: var(--hover-color);
         }
 
         .tomato-emoji {
@@ -87,7 +87,7 @@
         }
 
         .settings-button {
-            background-color: #ff6347;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 5px;
@@ -96,7 +96,7 @@
         }
 
         .settings-button:hover {
-            background-color: #ff4500;
+            background-color: var(--hover-color);
         }
 
         .task-list {
@@ -120,7 +120,7 @@
             width: 25px;
             height: 25px;
             padding: 0;
-            background-color: #ff6347;
+            background-color: var(--primary-color);
             font-size: 20px;
             margin-left: 10px;
             border-radius: 50%;
@@ -189,21 +189,8 @@
         }
 
         .indigo-theme {
-            --primary-color: #4b0082;
-            --hover-color: #3a005f;
-        }
-
-        .violet-theme {
-            --primary-color: #ee82ee;
-            --hover-color: #d870d8;
-        }
-
-        button, .settings-button {
-            background-color: var(--primary-color);
-        }
-
-        button:hover, .settings-button:hover {
-            background-color: var(--hover-color);
+            --primary-color: #6a5acd;
+            --hover-color: #483d8b;
         }
     </style>
 </head>
@@ -268,7 +255,6 @@
                     <option value="green-theme">Green</option>
                     <option value="blue-theme">Blue</option>
                     <option value="indigo-theme">Indigo</option>
-                    <option value="violet-theme">Violet</option>
                 </select>
             </label>
             <br>
@@ -420,11 +406,11 @@
             }
 
             document.body.style.fontFamily = fontSelect.value;
-
             document.body.className = themeSelect.value;
 
             updateTaskVisibility();
             toggleSettingsMenu();
+            updateTomatoEmoji(); // Ensure emoji changes immediately
         }
 
         function updateTaskVisibility() {
@@ -438,30 +424,56 @@
             });
         }
 
+        function updateTomatoEmoji() {
+            const theme = document.body.className;
+            switch (theme) {
+                case 'red-theme':
+                    tomatoEmoji.textContent = '🍅';
+                    break;
+                case 'orange-theme':
+                    tomatoEmoji.textContent = '🍊';
+                    break;
+                case 'yellow-theme':
+                    const yellowEmojis = ['🍌', '🍰', '🧁', '🍦', '🧀', '🧈', '🥞', '🧇', '🥯', '🍞', '🍋'];
+                    tomatoEmoji.textContent = yellowEmojis[Math.floor(Math.random() * yellowEmojis.length)];
+                    break;
+                case 'green-theme':
+                    const greenEmojis = ['🥝', '🥑', '🥦', '🥬', '🥒', '🍵', '🧃'];
+                    tomatoEmoji.textContent = greenEmojis[Math.floor(Math.random() * greenEmojis.length)];
+                    break;
+                case 'blue-theme':
+                    tomatoEmoji.textContent = '🫐'; // Blueberry
+                    break;
+                case 'indigo-theme':
+                    tomatoEmoji.textContent = '🫐'; // Blueberry (for indigo)
+                    break;
+            }
+        }
+
+        function toggleProgressVisibility() {
+            progressSection.style.display = hideProgressToggle.checked ? 'none' : 'block';
+        }
+
         function addTask() {
             const taskText = taskInput.value.trim();
-            if (taskText) {
+            if (taskText !== '') {
                 const li = document.createElement('li');
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.addEventListener('change', (e) => {
-                    if (e.target.checked) {
+                checkbox.addEventListener('change', (event) => {
+                    if (event.target.checked) {
                         li.classList.add('completed');
                     } else {
                         li.classList.remove('completed');
                     }
                     updateTaskVisibility();
                 });
+
                 li.appendChild(checkbox);
                 li.appendChild(document.createTextNode(taskText));
                 taskList.appendChild(li);
                 taskInput.value = '';
-                updateTaskVisibility();
             }
-        }
-
-        function toggleProgressVisibility() {
-            progressSection.style.display = hideProgressToggle.checked ? 'none' : 'block';
         }
 
         startButton.addEventListener('click', startTimer);
@@ -471,6 +483,7 @@
         saveSettingsButton.addEventListener('click', saveSettings);
         addTaskButton.addEventListener('click', addTask);
         hideProgressToggle.addEventListener('change', toggleProgressVisibility);
+        themeSelect.addEventListener('change', updateTomatoEmoji);
 
         updateTimer(); // Initialize timer display
         saveSettings(); // Initialize settings on load
