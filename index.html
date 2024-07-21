@@ -425,30 +425,34 @@
         }
 
         function updateTomatoEmoji() {
-            const theme = document.body.className;
-            switch (theme) {
-                case 'red-theme':
-                    tomatoEmoji.textContent = '🍅';
-                    break;
-                case 'orange-theme':
-                    tomatoEmoji.textContent = '🍊';
-                    break;
-                case 'yellow-theme':
-                    const yellowEmojis = ['🍌', '🍰', '🧁', '🍦', '🧀', '🧈', '🥞', '🧇', '🥯', '🍞', '🍋'];
-                    tomatoEmoji.textContent = yellowEmojis[Math.floor(Math.random() * yellowEmojis.length)];
-                    break;
-                case 'green-theme':
-                    const greenEmojis = ['🥝', '🥑', '🥦', '🥬', '🥒', '🍵', '🧃'];
-                    tomatoEmoji.textContent = greenEmojis[Math.floor(Math.random() * greenEmojis.length)];
-                    break;
-                case 'blue-theme':
-                    tomatoEmoji.textContent = '🫐'; // Blueberry
-                    break;
-                case 'indigo-theme':
-                    tomatoEmoji.textContent = '🫐'; // Blueberry (for indigo)
-                    break;
-            }
-        }
+    const theme = document.body.className;
+    switch (theme) {
+        case 'red-theme':
+            tomatoEmoji.textContent = '🍅';
+            break;
+        case 'orange-theme':
+            const orangeEmojis = ['🍊', '🍑', '🥕', '🥭', '🥧', '🍤'];
+            tomatoEmoji.textContent = orangeEmojis[Math.floor(Math.random() * orangeEmojis.length)];
+            break;
+        case 'yellow-theme':
+            const yellowEmojis = ['🍌', '🍰', '🧁', '🍦', '🧀', '🧈', '🥞', '🧇', '🥯', '🍞', '🍋'];
+            tomatoEmoji.textContent = yellowEmojis[Math.floor(Math.random() * yellowEmojis.length)];
+            break;
+        case 'green-theme':
+            const greenEmojis = ['🥝', '🥑', '🥦', '🥬', '🥒', '🍵', '🧃', '🍏', '🍐', '🥗'];
+            tomatoEmoji.textContent = greenEmojis[Math.floor(Math.random() * greenEmojis.length)];
+            break;
+        case 'blue-theme':
+            const blueEmojis = ['🐟', '🫐', '🧊', '🥣', '🪼', '🦋'];
+            tomatoEmoji.textContent = blueEmojis[Math.floor(Math.random() * blueEmojis.length)];
+            break;
+        case 'indigo-theme':
+            const indigoEmojis = ['🍆', '🍇', '👾', '🪻'];
+            tomatoEmoji.textContent = indigoEmojis[Math.floor(Math.random() * indigoEmojis.length)];
+            break;
+    }
+}
+
 
         function toggleProgressVisibility() {
             progressSection.style.display = hideProgressToggle.checked ? 'none' : 'block';
