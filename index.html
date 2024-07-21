@@ -31,7 +31,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
-            width: 300px;
+            width: 350px;
         }
 
         h1 {
@@ -142,6 +142,20 @@
         .tasks input[type="checkbox"] {
             margin-right: 10px;
         }
+
+        .progress {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .progress h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .progress p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -188,6 +202,11 @@
             <button id="addTaskButton">+</button>
             <ul class="tasks" id="taskList"></ul>
         </div>
+        <div class="progress">
+            <h2>Progress</h2>
+            <p id="sessionCount">Sessions Completed: 0</p>
+            <p id="totalTime">Total Time Worked: 0 minutes</p>
+        </div>
     </div>
 
     <script>
@@ -197,7 +216,8 @@
         let workDuration = 25 * 60; // 25 minutes in seconds
         let breakDuration = 5 * 60; // 5 minutes in seconds
         let timeLeft = workDuration; // initial time left set to work duration
-
+        let sessionCount = 0;
+        let totalTimeWorked = 0;
         const timerElement = document.getElementById('timer');
         const startButton = document.getElementById('start');
         const pauseButton = document.getElementById('pause');
@@ -214,6 +234,8 @@
         const taskInput = document.getElementById('taskInput');
         const addTaskButton = document.getElementById('addTaskButton');
         const taskList = document.getElementById('taskList');
+        const sessionCountElement = document.getElementById('sessionCount');
+        const totalTimeElement = document.getElementById('totalTime');
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -236,6 +258,8 @@
                             timeLeft = parseInt(workDurationInput.value) * 60;
                         } else {
                             alert('Time\'s up! Take a break!');
+                            sessionCount++;
+                            totalTimeWorked += parseInt(workDurationInput.value);
                             isBreak = true;
                             timeLeft = parseInt(breakDurationInput.value) * 60;
                         }
@@ -265,69 +289,74 @@
             updateTimer();
         }
 
-        function toggleSettingsMenu() {
-            settingsMenu.style.display = settingsMenu.style.display === 'none' || settingsMenu.style.display === '' ? 'block' : 'none';
-        }
+                  function toggleSettingsMenu() {
+                      settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+                  }
 
-        function saveSettings() {
-            resetTimer();
-            toggleSettingsMenu();
+                  function saveSettings() {
+                      workDuration = parseInt(workDurationInput.value) * 60;
+                      breakDuration = parseInt(breakDurationInput.value) * 60;
+                      timeLeft = workDuration;
+                      updateTimer();
 
-            // Toggle tomato wiggle
-            if (wiggleToggle.checked) {
-                tomatoEmoji.style.animation = 'wiggle 0.5s infinite';
-            } else {
-                tomatoEmoji.style.animation = 'none';
-            }
+                      if (wiggleToggle.checked) {
+                          tomatoEmoji.style.animation = 'wiggle 0.5s infinite';
+                      } else {
+                          tomatoEmoji.style.animation = 'none';
+                      }
 
-            // Toggle tomato visibility
-            if (showTomatoToggle.checked) {
-                tomatoEmoji.style.display = 'block';
-            } else {
-                tomatoEmoji.style.display = 'none';
-            }
-            
-            // Toggle completed tasks visibility
-            const tasks = document.querySelectorAll('.tasks li');
-            tasks.forEach(task => {
-                if (hideCompletedTasksToggle.checked && task.classList.contains('completed')) {
-                    task.style.display = 'none';
-                } else {
-                    task.style.display = 'flex';
-                }
-            });
-        }
+                      if (showTomatoToggle.checked) {
+                          tomatoEmoji.style.display = 'block';
+                      } else {
+                          tomatoEmoji.style.display = 'none';
+                      }
 
-        function addTask() {
-            const taskText = taskInput.value.trim();
-            if (taskText) {
-                const li = document.createElement('li');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.addEventListener('change', (e) => {
-                    if (e.target.checked) {
-                        li.classList.add('completed');
-                    } else {
-                        li.classList.remove('completed');
-                    }
-                    saveSettings(); // Update tasks visibility based on settings
-                });
-                li.appendChild(checkbox);
-                li.appendChild(document.createTextNode(taskText));
-                taskList.appendChild(li);
-                taskInput.value = '';
-                saveSettings(); // Update tasks visibility based on settings
-            }
-        }
+                      updateTaskVisibility();
+                      toggleSettingsMenu();
+                  }
 
-        startButton.addEventListener('click', startTimer);
-        pauseButton.addEventListener('click', pauseTimer);
-        resetButton.addEventListener('click', resetTimer);
-        settingsButton.addEventListener('click', toggleSettingsMenu);
-        saveSettingsButton.addEventListener('click', saveSettings);
-        addTaskButton.addEventListener('click', addTask);
+                  function updateTaskVisibility() {
+                      const tasks = document.querySelectorAll('.tasks li');
+                      tasks.forEach(task => {
+                          if (hideCompletedTasksToggle.checked && task.classList.contains('completed')) {
+                              task.style.display = 'none';
+                          } else {
+                              task.style.display = 'flex';
+                          }
+                      });
+                  }
 
-        updateTimer(); // initialize timer display
-    </script>
-</body>
-</html>
+                  function addTask() {
+                      const taskText = taskInput.value.trim();
+                      if (taskText) {
+                          const li = document.createElement('li');
+                          const checkbox = document.createElement('input');
+                          checkbox.type = 'checkbox';
+                          checkbox.addEventListener('change', (e) => {
+                              if (e.target.checked) {
+                                  li.classList.add('completed');
+                              } else {
+                                  li.classList.remove('completed');
+                              }
+                              updateTaskVisibility();
+                          });
+                          li.appendChild(checkbox);
+                          li.appendChild(document.createTextNode(taskText));
+                          taskList.appendChild(li);
+                          taskInput.value = '';
+                          updateTaskVisibility();
+                      }
+                  }
+
+                  startButton.addEventListener('click', startTimer);
+                  pauseButton.addEventListener('click', pauseTimer);
+                  resetButton.addEventListener('click', resetTimer);
+                  settingsButton.addEventListener('click', toggleSettingsMenu);
+                  saveSettingsButton.addEventListener('click', saveSettings);
+                  addTaskButton.addEventListener('click', addTask);
+
+                  updateTimer(); // Initialize timer display
+                  saveSettings(); // Initialize settings on load
+              </script>
+          </body>
+          </html>
