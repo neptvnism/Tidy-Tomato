@@ -68,7 +68,7 @@
         .settings-menu {
             display: none;
             position: absolute;
-            top: 20px;
+            top: 80px;
             right: 20px;
             background: white;
             border: 1px solid #ddd;
@@ -84,10 +84,7 @@
         }
 
         .settings-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #007bff;
+            background-color: #ff6347;
             color: white;
             border: none;
             border-radius: 5px;
@@ -96,24 +93,35 @@
         }
 
         .settings-button:hover {
-            background-color: #0056b3;
+            background-color: #ff4500;
         }
     </style>
 </head>
 <body>
     <div class="pomodoro-container">
         <h1>Pomodoro Timer</h1>
-        <div class="tomato-emoji">🍅</div>
+        <div class="tomato-emoji" id="tomatoEmoji">🍅</div>
         <div id="timer">25:00</div>
         <button id="start">Start</button>
         <button id="reset">Reset</button>
-        <button class="settings-button" id="settingsButton">⚙️</button>
+        <button class="settings-button" id="settingsButton">Settings</button>
         <div class="settings-menu" id="settingsMenu">
             <h2>Settings</h2>
             <label>
                 Timer Duration (minutes):
                 <input type="number" id="timerDuration" value="25" min="1" max="60">
             </label>
+            <br>
+            <label>
+                <input type="checkbox" id="wiggleToggle" checked>
+                Tomato Wiggle
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="showTomatoToggle" checked>
+                Show Tomato
+            </label>
+            <br>
             <button id="saveSettings">Save</button>
         </div>
     </div>
@@ -128,7 +136,10 @@
         const settingsButton = document.getElementById('settingsButton');
         const settingsMenu = document.getElementById('settingsMenu');
         const timerDurationInput = document.getElementById('timerDuration');
+        const wiggleToggle = document.getElementById('wiggleToggle');
+        const showTomatoToggle = document.getElementById('showTomatoToggle');
         const saveSettingsButton = document.getElementById('saveSettings');
+        const tomatoEmoji = document.getElementById('tomatoEmoji');
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -165,6 +176,20 @@
         function saveSettings() {
             resetTimer();
             toggleSettingsMenu();
+
+            // Toggle tomato wiggle
+            if (wiggleToggle.checked) {
+                tomatoEmoji.style.animation = 'wiggle 0.5s infinite';
+            } else {
+                tomatoEmoji.style.animation = 'none';
+            }
+
+            // Toggle tomato visibility
+            if (showTomatoToggle.checked) {
+                tomatoEmoji.style.display = 'block';
+            } else {
+                tomatoEmoji.style.display = 'none';
+            }
         }
 
         startButton.addEventListener('click', startTimer);
